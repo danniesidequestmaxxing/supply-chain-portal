@@ -6,6 +6,7 @@ import { Industry, Company, SupplyChainPosition, SupplyChainNode } from '@/data/
 import { getPositionColor } from '@/lib/utils'
 import { LaneHeader } from './LaneHeader'
 import { NodeGroup } from './NodeGroup'
+import { CompanyDeepDive } from './CompanyDeepDive'
 
 interface SupplyChainMapProps {
   industry: Industry
@@ -67,6 +68,10 @@ export function SupplyChainMap({ industry }: SupplyChainMapProps) {
     downstream: industry.supplyChain.filter(n => n.position === 'downstream'),
   }), [industry])
 
+  const allCompanies = useMemo(() => {
+    return industry.supplyChain.flatMap(n => n.companies)
+  }, [industry])
+
   const handleSelect = (company: Company) => {
     setSelectedCompany(company)
     console.log('Selected:', company.name, company.ticker)
@@ -113,6 +118,20 @@ export function SupplyChainMap({ industry }: SupplyChainMapProps) {
 
         <Lane position="downstream" nodes={downstream} onSelectCompany={handleSelect} />
       </div>
+
+      {/* Company Deep Dive Panel */}
+      {selectedCompany && (
+        <>
+          <div className="fixed inset-0 bg-black/40 z-40" onClick={() => setSelectedCompany(null)} />
+          <CompanyDeepDive
+            company={selectedCompany}
+            allCompanies={allCompanies}
+            accentColor={industry.accentColor}
+            onClose={() => setSelectedCompany(null)}
+            onNavigate={(c) => setSelectedCompany(c)}
+          />
+        </>
+      )}
     </div>
   )
 }
