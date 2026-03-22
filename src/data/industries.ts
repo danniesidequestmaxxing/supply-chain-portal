@@ -4,6 +4,7 @@ import { defenseData } from './defense';
 import { energyData } from './energy';
 import { datacentersData } from './datacenters';
 import { roboticsData } from './robotics';
+import { miningData } from './mining';
 import { Industry } from './types';
 
 export const industries: Industry[] = [
@@ -13,6 +14,7 @@ export const industries: Industry[] = [
   energyData,
   datacentersData,
   roboticsData,
+  miningData,
 ];
 
 export function getIndustryById(id: string): Industry | undefined {
